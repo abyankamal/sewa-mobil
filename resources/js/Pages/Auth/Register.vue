@@ -81,7 +81,7 @@ const submit = () => {
 
                 <TextInput
                     id="license_number"
-                    type="number"
+                    type="text"
                     class="mt-1 block w-full"
                     v-model="form.license_number"
                     required
@@ -100,7 +100,7 @@ const submit = () => {
 
                 <TextInput
                     id="phone_number"
-                    type="number"
+                    type="text"
                     class="mt-1 block w-full"
                     v-model="form.phone_number"
                     required

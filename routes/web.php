@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/car', [RentalController::class, 'index'])->name('index');
-    Route::post('/addCar', [RentalController::class, 'carForm'])->name('carForm');
+    Route::get('/addCar', [RentalController::class, 'carForm'])->name('carForm');
     Route::post('/addCar', [RentalController::class, 'addCar'])->name('addCar');
     Route::get('/rent-car/{id}', [RentalController::class, 'rentForm'])->name('rentForm');
     Route::post('/rent-car', [RentalController::class, 'rentCar'])->name('rentCar');

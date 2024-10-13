@@ -1,31 +1,38 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 
+// Menggunakan modelValue untuk v-model
 const props = defineProps({
-    className: String,
-    options: Array,
-    currentValue: String,
+    modelValue: String, // Nilai yang di-bind dengan v-model
+    options: Array, // Opsi untuk select
+    className: String, // Kelas CSS tambahan
 });
 
-// Define emitted events
-const emit = defineEmits(["change"]); // Declare the 'change' event
+const emit = defineEmits(["update:modelValue"]); // Menggunakan update:modelValue untuk v-model
 
-const selectedValue = ref(props.currentValue);
+// State lokal untuk nilai yang dipilih
+const selectedValue = ref(props.modelValue);
 
-const classes = computed(() => {
-    return (
-        "rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" +
-        props.className
-    );
-});
+// Komputasi untuk kelas
+const classes = computed(
+    () =>
+        `rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 ${
+            props.className || ""
+        }`
+);
 
-watch(props, (updatedProps) => {
-    selectedValue.value = updatedProps.currentValue;
-});
+// Melakukan sinkronisasi dengan nilai modelValue dari parent (form)
+watch(
+    () => props.modelValue,
+    (newValue) => {
+        selectedValue.value = newValue;
+    }
+);
 
+// Fungsi untuk menangani perubahan nilai dan memancarkan event ke parent
 const handleChange = (newValue) => {
     selectedValue.value = newValue;
-    emit("change", newValue); // Emit the 'change' event with the new value
+    emit("update:modelValue", newValue); // Emit perubahan untuk sinkronisasi v-model
 };
 </script>
 

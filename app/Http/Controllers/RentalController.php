@@ -48,16 +48,16 @@ class RentalController extends Controller
             'model' => $request->model,
             'license_plate' => $request->license_plate,
             'rental_rate' => $request->rental_rate,
-            'status' => true,
+            'is_available' => true,
         ]);
 
-        return back()->with('message', 'Kendaraan berhasil ditambahkan!');
+        return redirect()->route('index')->with('message', 'Kendaraan berhasil ditambahkan!');
     }
 
-    public function rentForm()
+    public function rentForm($carId)
     {
         // Ambil semua mobil yang tersedia untuk disewa
-        $cars = Car::where('status', 'available')->get();
+        $cars = Car::findOrFail($carId);
 
         // Kirim data mobil ke halaman Vue.js menggunakan Inertia
         return Inertia::render('RentCar', [
@@ -111,7 +111,7 @@ class RentalController extends Controller
         $car->is_available = false;
         $car->save();
 
-        return back()->with('message', 'Peminjaman berhasil!');
+        return redirect()->route('index')->with('message', 'Kendaraan berhasil disewa!');
     }
 
     // Fungsi untuk mengembalikan mobil
@@ -150,5 +150,22 @@ class RentalController extends Controller
         $car->save();
 
         return back()->with('message', 'Mobil berhasil dikembalikan!');
+    }
+
+    public function carRented(Request $request)
+    {
+        // Ambil ID pengguna yang sedang login
+        $userId = $request->user()->id;
+
+        // Ambil daftar mobil yang telah disewa oleh pengguna
+        $rentedCars = Rental::with('car') // Mengambil mobil yang disewa
+            ->where('user_id', $userId)   // Filter berdasarkan ID pengguna
+            ->where('status', 'ongoing')  // Status peminjaman yang sedang berlangsung
+            ->get();
+
+        // Kirim data ke tampilan Inertia.js
+        return Inertia::render('RentedCars', [
+            'rentedCars' => $rentedCars, // Data mobil yang telah disewa
+        ]);
     }
 }

@@ -1,6 +1,10 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link } from "@inertiajs/vue3";
+
+const props = defineProps({
+    rentedCars: Array,
+});
 </script>
 
 <template>
@@ -8,14 +12,16 @@ import { Head, Link } from "@inertiajs/vue3";
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Halaman Daftar Mobil
+                Halaman Daftar Rental
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center mb-4 mx-4">
-                    <label htmlFor="">Total Mobil: 12</label>
+                    <label htmlFor=""
+                        >Total Mobil: {{ rentedCars.length }}</label
+                    >
                     <Link
                         :href="route('addCar')"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
